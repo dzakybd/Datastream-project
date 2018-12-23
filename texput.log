@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2018.10.15)  21 DEC 2018 22:57
+This is XeTeX, Version 3.14159265-2.6-0.99999 (MiKTeX 2.9.6840) (preloaded format=xelatex 2018.11.17)  23 DEC 2018 14:55
 entering extended mode
 **refs.tex
 
@@ -9,11 +9,11 @@ entering extended mode
 
  
 Here is how much of TeX's memory you used:
- 2 strings out of 494889
- 14 string characters out of 3176656
- 51369 words of memory out of 3000000
- 3734 multiletter control sequences out of 15000+200000
+ 2 strings out of 429714
+ 14 string characters out of 3179265
+ 55244 words of memory out of 3000000
+ 3980 multiletter control sequences out of 15000+200000
  3640 words of font info for 14 fonts, out of 3000000 for 9000
  0 hyphenation exceptions out of 8191
  0i,0n,0p,1b,6s stack positions out of 5000i,500n,10000p,200000b,50000s
-!  ==> Fatal error occurred, no output PDF file produced!
+No pages of output.

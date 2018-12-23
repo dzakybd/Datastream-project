@@ -21,10 +21,6 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{sdbproject}
-F.~D.~Z. T.~Dion, ``Splitter gui,''
-  \url{https://github.com/dzakybd/Datastream-project}, 2018.
-
 \bibitem{zhang2014splitter}
 C.~Zhang, J.~Han, L.~Shou, J.~Lu, and T.~La~Porta, ``Splitter: Mining
   fine-grained sequential patterns in semantic trajectories,''

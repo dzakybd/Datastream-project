@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2018.10.15)  21 DEC 2018 23:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2018.10.15)  23 DEC 2018 16:07
 entering extended mode
 **./paper.tex
 (paper.tex
@@ -524,42 +524,67 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 34.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 35.
 
 ("/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 /psnfss/omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 34.
-<splitter.png, id=1, 808.01875pt x 222.8325pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
+LaTeX Font Info:    Try loading font information for U+msa on input line 35.
+
+("/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/amsfonts/umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 35.
+
+("/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/amsfonts/umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+Underfull \hbox (badness 10000) in paragraph at lines 35--35
+[][][]\OT1/ptm/m/n/8 The SplitterGUI project files can be downloaded at
+ []
+
+
+Underfull \hbox (badness 1418) in paragraph at lines 47--48
+[]\OT1/ptm/m/n/10 The sequential patterns can be found in a trajectory
+ []
+
+<splitter.png, id=1, 459.7175pt x 875.27pt>
 File: splitter.png Graphic file (type png)
 <use splitter.png>
-Package pdftex.def Info: splitter.png  used on input line 53.
-(pdftex.def)             Requested size: 252.0pt x 69.49557pt.
- [1{/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/data/pdftex/con
-fig/pdftex.map}
+Package pdftex.def Info: splitter.png  used on input line 58.
+(pdftex.def)             Requested size: 138.60077pt x 263.89186pt.
+[1{/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/data/pdftex/conf
+ig/pdftex.map}
 
 
  <./splitter.png>]
-Underfull \hbox (badness 4454) in paragraph at lines 75--76
+<transformed_database.png, id=15, 527.0892pt x 120.9318pt>
+File: transformed_database.png Graphic file (type png)
+<use transformed_database.png>
+Package pdftex.def Info: transformed_database.png  used on input line 74.
+(pdftex.def)             Requested size: 252.0pt x 57.81778pt.
+<mining_coarse_pattern.png, id=16, 581.0508pt x 495.2904pt>
+File: mining_coarse_pattern.png Graphic file (type png)
+<use mining_coarse_pattern.png>
+Package pdftex.def Info: mining_coarse_pattern.png  used on input line 85.
+(pdftex.def)             Requested size: 252.0pt x 214.79964pt.
+<graph_coarse_pattern.png, id=17, 336.2964pt x 216.81pt>
+File: graph_coarse_pattern.png Graphic file (type png)
+<use graph_coarse_pattern.png>
+Package pdftex.def Info: graph_coarse_pattern.png  used on input line 94.
+(pdftex.def)             Requested size: 176.39923pt x 113.72769pt.
+ [2 <./transformed_database.png> <./mining_coarse_pattern.png> <./graph_coarse_
+pattern.png>]
+Underfull \hbox (badness 4454) in paragraph at lines 105--106
 []\OT1/ptm/m/it/10 Sequences\OT1/ptm/m/n/10 , it contains users semantic trajec
 tories
  []
 
-
-LaTeX Warning: Reference `fig:UI' on page 2 undefined on input line 81.
-
-<GraphRepresentation.png, id=13, 327.1422pt x 485.6544pt>
-File: GraphRepresentation.png Graphic file (type png)
-<use GraphRepresentation.png>
-Package pdftex.def Info: GraphRepresentation.png  used on input line 85.
-(pdftex.def)             Requested size: 126.0pt x 187.04791pt.
-<GUI.png, id=14, 507.3354pt x 490.4724pt>
-File: GUI.png Graphic file (type png)
-<use GUI.png>
-Package pdftex.def Info: GUI.png  used on input line 92.
-(pdftex.def)             Requested size: 126.0pt x 121.80952pt.
 (paper.bbl)
 
 ** Conference Paper **
@@ -572,30 +597,35 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[2 <./GraphRepresentation.png> <./GUI.png>] (paper.aux)
+[3
 
-LaTeX Warning: There were undefined references.
-
- ) 
+] (paper.aux) ) 
 Here is how much of TeX's memory you used:
- 4384 strings out of 494889
- 66559 string characters out of 3176656
- 128379 words of memory out of 3000000
- 7959 multiletter control sequences out of 15000+200000
- 35250 words of font info for 64 fonts, out of 3000000 for 9000
+ 4434 strings out of 494889
+ 67622 string characters out of 3176656
+ 129384 words of memory out of 3000000
+ 7988 multiletter control sequences out of 15000+200000
+ 40020 words of font info for 84 fonts, out of 3000000 for 9000
  0 hyphenation exceptions out of 8191
- 41i,8n,35p,803b,294s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/fonts/en
-c/dvips/base/8r.enc}</Users/MacbookPro/Library/Application Support/MiKTeX/texmf
-s/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/MacbookPro/Library/
-Application Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmb8a.pfb></Us
-ers/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/ur
-w/times/utmbi8a.pfb></Users/MacbookPro/Library/Application Support/MiKTeX/texmf
-s/install/fonts/type1/urw/times/utmr8a.pfb></Users/MacbookPro/Library/Applicati
-on Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (2 pages, 265567 bytes).
+ 41i,8n,35p,935b,294s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/ins
+tall/fonts/enc/dvips/base/8r.enc}</Users/MacbookPro/Library/Application Support
+/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/Macboo
+kPro/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfo
+nts/cm/cmmi8.pfb></Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/i
+nstall/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/MacbookPro/Library/Appl
+ication Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr7.pfb><
+/Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></Users/MacbookPro/Library/Application Support/M
+iKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy8.pfb></Users/MacbookPr
+o/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmb8
+a.pfb></Users/MacbookPro/Library/Application Support/MiKTeX/texmfs/install/font
+s/type1/urw/times/utmbi8a.pfb></Users/MacbookPro/Library/Application Support/Mi
+KTeX/texmfs/install/fonts/type1/urw/times/utmr8a.pfb></Users/MacbookPro/Library
+/Application Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (3 pages, 348238 bytes).
 PDF statistics:
- 37 PDF objects out of 1000 (max. 8388607)
+ 62 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
