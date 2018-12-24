@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="Lib/apache-commons.jar"/>
+	<classpathentry kind="lib" path="Lib/com.ibm.icu_62.1.0.v20180727-1652.jar"/>
+	<classpathentry kind="lib" path="Lib/commons-math3-3.0.jar"/>
+	<classpathentry kind="lib" path="Lib/google-collections-1.0.jar"/>
+	<classpathentry kind="lib" path="Lib/google-common.jar"/>
+	<classpathentry kind="lib" path="Lib/guava.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/core.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/G4P.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/jogl-all.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/json4processing.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="Lib/Unfolding/unfolding.0.9.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
