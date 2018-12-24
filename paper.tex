@@ -93,7 +93,7 @@ The result of coarse pattern has satisfy support threshold $\sigma$ and time con
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{graph_coarse_pattern}
+	\includegraphics[width=1\linewidth]{graph_coarse_pattern}
 	\caption{Graph representation of coarse pattern result}
 	\label{fig:graph-coarse-pattern}
 \end{figure}
@@ -127,7 +127,7 @@ Algorithm 3 shows refine coarse pattern algorithm. First, we cluster snippet usi
 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{"refine coarse"}
+	\includegraphics[width=1\linewidth]{"refine coarse"}
 	\caption{Refine coarse pattern algorithm \cite{zhang2014splitter}}
 	\label{fig:refine-coarse}
 \end{figure}
@@ -143,17 +143,17 @@ This project will use the real database, 4SQ that collected from Foursquare chec
 \end{enumerate}
 
 \subsection{Implementation detail}
-We will re-implement the process of mining fine-grained pattern using Java programing language. For improving GUI performance, we use G4P library (http://www.lagers.org.uk/g4p/) that based on OpenGL and JavaFX rendering engines. The other purpose is to support geographical map visualization from unfolding library (http://unfoldingmaps.org/) that use OpenGL rendering engines. We also using other libraries such as apache commons (http://commons.apache.org) to support our program. 
+We will re-implement the process of mining fine-grained pattern using Java programing language. For improving GUI performance, we use G4P library (http://www.lagers.org.uk/g4p/) that based on OpenGL and JavaFX rendering engines. The other purpose is to support geographical map visualization from unfolding library (http://unfoldingmaps.org/) that also use OpenGL rendering engines. We also using other libraries such as apache commons (http://commons.apache.org) to support our program. 
 \par 
 Input of our program is database file that will be used to build graph representation as our database in the system. This graph representation is based on adjacency list that is shown in \ref{fig:adjacency}. There are 4 object: database, trajectory, place, and category. Database object has list of trajectory that have id to represent people and have list of sequence to represent the movement. Each movement is a list of timestamped place that has information of place id, position, and category. In the next step, we implement mining coarse pattern algorithm and refine coarse pattern algorithm for finding fine-grained pattern from the database. 
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{adjacency}
+	\includegraphics[width=1\linewidth]{adjacency}
 	\caption{Structure of database in adjacency list representation}
 	\label{fig:adjacency}
 \end{figure}
 
-The user interface of program will be provided as shown in the Fig. \ref{fig:visual}. The figure shows the illustration of our program. There are 3 database input in .csv format for category and place and .txt format for the sequence data. There are also have 6 input parameters in the configuration. Support threshold, pattern length, and time limit for mining coarse pattern, and variance threshold, dampening factor for refine the coarse pattern. In the first step, we have to create the database. After that,we can mine coarse first then perform refine coarse pattern or do both coarse pattern and refine coarse pattern respectively.
+The user interface of program will be provided as shown in the Fig. \ref{fig:visual}. The figure shows the illustration of our program. There are 3 database input in .csv format for category and place and .txt format for the sequence data. There are also 6 input parameters in the configuration field. Support threshold, pattern length, and time limit for mining coarse pattern, and variance threshold, dampening factor for refine the coarse pattern. In the first step, we have to create the database. After that,we can mine coarse pattern first then perform refine coarse pattern or do both coarse pattern and refine coarse pattern respectively.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=1\linewidth]{visual}
@@ -162,25 +162,34 @@ The user interface of program will be provided as shown in the Fig. \ref{fig:vis
 \end{figure}
 
 \subsection{Experiment}
-Experiment is conducted in windows 10 Pro 64-bit running on Processor Intel Core I5 7500 @3.40GHz, 4GB of RAM, and Intel HD Graphics 630. First, we choose database file and fill the input parameters support threshold 100, variance threshold 0.0004, time constraint 120, dampening factor 0.8, Bandwidth 0.02, and minimum pattern length 2. In this application, minimum pattern length is used to set the minimum length of pattern when mining coarse pattern. Secondly, We create the database by pushing create database button. Before, pushing the button, we decided to uncheck show trajectory radio button because it decrease the performance when creating line marker in map. In this function, it also searching the number of category that exist in the database. From 48.564 of distinct places, we get 15 categories.   
+Experiment is conducted in windows 10 Pro 64-bit running on Processor Intel Core I5 7500 @3.40GHz, 4GB of RAM, and Intel HD Graphics 630. First, we choose database file and fill the input parameters support threshold 100, variance threshold 0.0004, time constraint 120, dampening factor 0.8, Bandwidth 0.02, and minimum pattern length 2. In this application, minimum pattern length is used to set the minimum length of pattern when mining coarse pattern. Secondly, We create the database by pushing create database button. Before, pushing the button, we decided to unchecked show trajectory radio button because it decrease the performance when creating line marker in map visualization. In this function, it also search the number of category that exist in the database. From 48.564 of distinct places, we get 15 categories. Fig. \ref{fig:mapdatabase} shows the original number of place in the database.   
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.7\linewidth]{mapDatabase}
-	\caption{}
+	\includegraphics[width=1\linewidth]{mapDatabase}
+	\caption{Visualization of place found in from database}
 	\label{fig:mapdatabase}
 \end{figure}
 
-After creating database, we run prefix span algorithm for mining coarse pattern. In this process, we get places that occurs in the coarse pattern is 23264. It means that we reduce places up to half of places from the original database. The running time of mining coarse pattern is 3.685 seconds. Therefore, prefixspan algorithm is fast enough to finding a pattern in a database. Coarse pattern found from the database is 127 which consist of pattern length 2 (109 patterns) and pattern length 3 (18 patterns). The highest support or number of trajectory that using this pattern in the length of 2 is shop -> food which contains 2905 of trajectory. For the pattern length of 3, the highest support is food -> shop -> food which used by 299 of trajectory. From this result we can assume that a lot of people like to go the food area then go shopping then go to the another food area.  
+After creating database, we run prefix span algorithm for mining coarse pattern. In this process, places that occurs in the coarse pattern is 23264. It means that the process reduce places up to half of number of place occurred in the original database. The running time of mining coarse pattern is 3.685 seconds. Therefore, prefixspan algorithm is fast enough to finding a pattern in a database. Coarse pattern found from the database is 127 which consist of pattern length of 2 (109 patterns) and pattern length of 3 (18 patterns). The highest support or the total number of trajectory that using this pattern in the length of 2 is shop $\rightarrow$ food which contains 2905 of trajectories. For the pattern length of 3, the highest support is food $\rightarrow$ shop $\rightarrow$ food which used by 299 of trajectories. From this result we can assume that a lot of people like to go the food area then go shopping then go to the another food area. Fig. \ref{fig:mapcoarse} shows place reduction after mining coarse pattern.
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.7\linewidth]{mapCoarse}
-	\caption{}
+	\includegraphics[width=1\linewidth]{mapCoarse}
+	\caption{Visualization of place found after mining coarse pattern}
 	\label{fig:mapcoarse}
 \end{figure}
 
+The next step is refine coarse pattern to get fine grained pattern from the database. After we push mean shift button in the left side, the system will begin to refine coarse pattern. Fine grained pattern found in the database using the inputed parameter are 57 patterns. Using the inputed parameters, we cannot find fine-grained pattern that have length 3 occurred in the coarse pattern. It means that our coarse pattern that have length 3 is not satisfy the spatial closeness based on the parameters. Most trajectory follows pattern shop $\rightarrow$ food that have support 1063. Fig \ref{fig:maprefine} shows that places are clustered in a dense location only.    
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\linewidth]{mapRefine}
+	\caption{Visualization of place found after mining coarse pattern}
+	\label{fig:maprefine}
+\end{figure}
 
+\section{Conclusions}
+After doing the implementation of splitter: Mining Fine-Grained Pattern, it shows that it capable to find pattern that are frequent, in limited time movement, and have spatial closeness. In this paper, it also shown that the running time of splitter to find fine-grained pattern only take total running time below 20seconds from database that consist of 14909 trajectory and 48564 of places. In the first step, mining coarse pattern algorithm is used to searching pattern that satisfy support threshold $\sigma$ and time constraint $\Delta$t. In the next step, coarse pattern will be used as the input in refining pattern that satisfy spatial variance.   
 
 
 
