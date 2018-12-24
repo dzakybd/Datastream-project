@@ -161,6 +161,29 @@ The user interface of program will be provided as shown in the Fig. \ref{fig:vis
 	\label{fig:visual}
 \end{figure}
 
+\subsection{Experiment}
+Experiment is conducted in windows 10 Pro 64-bit running on Processor Intel Core I5 7500 @3.40GHz, 4GB of RAM, and Intel HD Graphics 630. First, we choose database file and fill the input parameters support threshold 100, variance threshold 0.0004, time constraint 120, dampening factor 0.8, Bandwidth 0.02, and minimum pattern length 2. In this application, minimum pattern length is used to set the minimum length of pattern when mining coarse pattern. Secondly, We create the database by pushing create database button. Before, pushing the button, we decided to uncheck show trajectory radio button because it decrease the performance when creating line marker in map. In this function, it also searching the number of category that exist in the database. From 48.564 of distinct places, we get 15 categories.   
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{mapDatabase}
+	\caption{}
+	\label{fig:mapdatabase}
+\end{figure}
+
+After creating database, we run prefix span algorithm for mining coarse pattern. In this process, we get places that occurs in the coarse pattern is 23264. It means that we reduce places up to half of places from the original database. The running time of mining coarse pattern is 3.685 seconds. Therefore, prefixspan algorithm is fast enough to finding a pattern in a database. Coarse pattern found from the database is 127 which consist of pattern length 2 (109 patterns) and pattern length 3 (18 patterns). The highest support or number of trajectory that using this pattern in the length of 2 is shop -> food which contains 2905 of trajectory. For the pattern length of 3, the highest support is food -> shop -> food which used by 299 of trajectory. From this result we can assume that a lot of people like to go the food area then go shopping then go to the another food area.  
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{mapCoarse}
+	\caption{}
+	\label{fig:mapcoarse}
+\end{figure}
+
+
+
+
+
 \section*{Acknowledgment}
 This paper is submitted to fulfill term project task from Stream Database class (Fall 2018), Pusan National University.
 

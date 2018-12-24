@@ -17,11 +17,11 @@ import java.util.Map.Entry;
 public class NDatabase {
 
 	public List<NTrajectory> trajectories = new ArrayList<NTrajectory>();
-	// temporal
 	Map<Integer, String> tempCategory = new HashMap<Integer, String>();
 	Map<Integer, NPlace> tempPlace = new HashMap<Integer, NPlace>();
 	Map<Integer, List<Integer>> group = new HashMap<Integer, List<Integer>>();
 	public List<String> groupName = new ArrayList<String>();
+
 	public List<NTrajectory> getTrajectories() {
 		return trajectories;
 	}
@@ -30,7 +30,6 @@ public class NDatabase {
 		readCategory(category);
 		readPlace(place);
 		readSequence(sequence);
-//		this.view();
 	}
 
 	// ==================================READ
@@ -94,15 +93,15 @@ public class NDatabase {
 		// for each place
 		String[] integers = place[place.length - 1].split(" ");
 		int i = 0;
-		
+
 		List<Integer> temp = new ArrayList<Integer>();
-		int index=-1;
+		int index = -1;
 		for (String chr : integers) {
 			int cId = Integer.parseInt(chr);
 			if (i > 0) {
 				temp.add(cId);
-				if(index==-1) {
-					index=checkinGroup(cId);
+				if (index == -1) {
+					index = checkinGroup(cId);
 				}
 			}
 			i++;
@@ -110,39 +109,32 @@ public class NDatabase {
 		NPlace p = new NPlace(placeId, lat, lng, groupByCategory(index, temp));
 		tempPlace.put(placeId, p);
 	}
-	
+
 	public NCategory groupByCategory(int index, List<Integer> temp) {
 		List<Integer> test = new ArrayList<Integer>();
 		test.add(temp.get(0));
 		NCategory category = null;
-		if(index==-1) {
-			group.put(group.size()+1, test);
+		if (index == -1) {
+			group.put(group.size() + 1, test);
 			groupName.add(tempCategory.get(temp.get(0)));
 			category = new NCategory(group.size(), tempCategory.get(temp.get(0)));
 
-		}else {
-//			temp.addAll(group.get(index));
-//			List<Integer> newList = temp.stream() 
-//                    .distinct() 
-//                    .collect(Collectors.toList()); 
-//			group.get(index).clear();
-//			group.get(index).addAll(newList);
+		} else {
 			category = new NCategory(index, tempCategory.get(temp.get(0)));
 		}
-		
+
 		return category;
 	}
-	
+
 	public int checkinGroup(int id) {
 		for (Entry<Integer, List<Integer>> entry : group.entrySet()) {
-			if(entry.getValue().contains(id)) {
+			if (entry.getValue().contains(id)) {
 				return entry.getKey();
 			}
 		}
-		
+
 		return -1;
 	}
-	
 
 	// =========================================READ
 	// SEQUENCE=================================
@@ -202,7 +194,7 @@ public class NDatabase {
 	public Map<Integer, NPlace> getPlace() {
 		return tempPlace;
 	}
-	
+
 	public Map<Integer, List<Integer>> getGroup() {
 		return this.group;
 	}

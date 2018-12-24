@@ -24,26 +24,18 @@ public class NSnippet {
 	}
 
 	public void view() {
-//		System.out.println("Length : "+mLength);
-//		System.out.println("mWeight : "+ mWeight);
 		System.out.print("mPlaceSeq : ");
 		for (NPlace i : mPlaceSequence) {
 			System.out.print(i.placeId + " - ");
 		}
-//		System.out.println();
-//		System.out.print("mVisitor : ");
-//		for (Integer i : mVisitors) {
-//			System.out.print(i + " - ");
-//		}
 		System.out.println();
 	}
 	
 	
-	//////////////////////////////////////////
+	///////////////////Splitter///////////////////////
 	public NDoubleVector toDoubleVector(NSnippet s, NDatabase N) {
 		double[] coordinates = new double[ 2 * s.mLength ];
 		for(int i=0; i<s.mPlaceSequence.size(); i++) {
-//			int placeId = s.mPlaceSequence.get( i );
 			NPlace place = s.mPlaceSequence.get(i);
 			coordinates[ 2*i ] = place.getLat();
 			coordinates[ 2*i+1 ] = place.getLng();

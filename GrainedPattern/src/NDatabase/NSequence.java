@@ -3,7 +3,6 @@ package NDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import Database.Item;
 
 public class NSequence {
 	public int time;

@@ -46,7 +46,8 @@ public class NPlace {
 		this.category.view();
 	}
 	
-	/////////////////////////////////
+	
+	///////////////Splitter//////////////////
 	public NPlace(double lat, double lng) {
 		this.placeId = -1;
 		this.lat = lat;

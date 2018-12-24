@@ -8,19 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import Database.Item;
-import Database.Itemset;
 import NDatabase.NDatabase;
 import NDatabase.NPlace;
 import NDatabase.NSequence;
 import NDatabase.NTrajectory;
-import coarsepattern.ProjectedSequence;
-import coarsepattern.Snippet;
-import coarsepattern.SnippetCluster;
 
 public class NPrefixspanAlgo {
-	// The sequential patterns that are found
-//	private NSequence patterns = null;
 	private List<NSnippetCluster> results = null;
 	int patternlength;
 
@@ -37,7 +30,6 @@ public class NPrefixspanAlgo {
 	}
 
 	public void runAlgorithm(NDatabase database) {
-//		patterns = new Sequences("FREQUENT SEQUENTIAL PATTERNS");
 		results = new ArrayList<NSnippetCluster>();
 		this.minsuppRelative = (int) minsup;
 		if (this.minsuppRelative == 0) { // protection
@@ -49,11 +41,7 @@ public class NPrefixspanAlgo {
 
 	public void InitialProjection(NDatabase d) {
 		Map<NSequence, Set<Integer>> frequent = getFrequentItem(d);
-//		for(Entry<NSequence, Set<Integer>> entry : frequent.entrySet()){
-//			entry.getKey().view();
-//			System.out.println();
-//		}
-//		
+	
 		for(Entry<NSequence, Set<Integer>> entry : frequent.entrySet()){
 			if(entry.getValue().size() >= this.minsuppRelative){
 				// build the projected context
@@ -67,15 +55,13 @@ public class NPrefixspanAlgo {
 				createCluster(newItem,cluster);
 				prefixSpan(newItem,2, S, this.maxInterval);
 			}
-//			break;
 		}
 		
 	}
 	
 	public void prefixSpan(NSequence seq, int level, NProjectedDatabase S, int time) {
 		Map<NSequence, Set<Integer>> frequent = getFrequentPair(S,time);
-//		if(frequent.values().size()>=this.minsuppRelative) {
-			for(Entry<NSequence, Set<Integer>> entry : frequent.entrySet()){
+		for(Entry<NSequence, Set<Integer>> entry : frequent.entrySet()){
 				if(entry.getValue().size() >= this.minsuppRelative){
 					// build the projected context
 					NSequence item = entry.getKey();
@@ -92,8 +78,6 @@ public class NPrefixspanAlgo {
 				}
 				
 			}
-//		}
-		
 	}
 	
 	
@@ -151,7 +135,6 @@ public class NPrefixspanAlgo {
 							groub.add(t.trajectoryId);
 							alreadyCounted.add(ns.place.category.categoryId);	
 						}
-//					}
 				}
 			}
 		
@@ -160,7 +143,6 @@ public class NPrefixspanAlgo {
 	}
 
 	public Map<NSequence, Set<Integer>> getFrequentItem(NDatabase db) {
-//		List<NPlace> frequent = new ArrayList<NPlace>();
 		Set<Integer> alreadyCounted = new HashSet<Integer>();
 		Map<NSequence, Set<Integer>> frequent = new HashMap<NSequence, Set<Integer>>();
 		for (NTrajectory t : db.trajectories) {

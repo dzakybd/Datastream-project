@@ -9,27 +9,21 @@ import NDatabase.NDatabase;
 import NDatabase.NPlace;
 import NPrefixspan.NSnippet;
 import NPrefixspan.NSnippetCluster;
-import Refine.MeanShift;
-import coarsepattern.Snippet;
-import coarsepattern.SnippetCluster;
 
 public class NMeanshiftAlgo {
-	double mSupThreshold; // support threshold
-	double mVarThreshold; // variance threshold
-	double mTau; // dampening factor
-	double bandwidth;
-
-	double mMergeWindow = 2e-3;
-	int mMaxIter = 100; // max iteration for mean shift
-
-	int mSnippetLength = 1;
-	NDatabase database = null;
-	List<NSnippetCluster> patternList = null; // result sequential patterns
+	private double mSupThreshold;
+	private double mVarThreshold; 
+	private double mTau; 
+	private double bandwidth;
+	private double mMergeWindow = 2e-3;
+	private int mMaxIter = 100; // max iteration for mean shift
+	private int mSnippetLength = 1;
+	private NDatabase database = null;
+	private List<NSnippetCluster> patternList = null; // 
 
 	public List<NSnippetCluster> getPatterns() {
 		return patternList;
 	}
-	
 	
 	public NMeanshiftAlgo(double mSupThreshold, double mVarThreshold, double mTau, double bandwidth, NDatabase d) {
 		super();
@@ -45,9 +39,6 @@ public class NMeanshiftAlgo {
 		mSnippetLength = snippetLength;
 		mMergeWindow = computeDimensionInvariant(snippetLength, mMergeWindow);
 		double dimensionInvariantBandwidth = computeDimensionInvariant(snippetLength, bandwidth);
-//		System.out.println(mSnippetLength);
-//		System.out.println(mMergeWindow);
-//		System.out.println(dimensionInvariantBandwidth);
 		splitPatternWithPruning(snippets,dimensionInvariantBandwidth);
 	}
 
@@ -57,7 +48,6 @@ public class NMeanshiftAlgo {
 
 		List<NSnippetCluster> snippetClusters = cluster(snippets,bandwidth);
 
-		
 		for (NSnippetCluster sc : snippetClusters) {
 			if (sc.computeSuppport() >= mSupThreshold && sc.computeVariance(database) <= mVarThreshold) {
 				patternList.add(sc);
@@ -72,16 +62,10 @@ public class NMeanshiftAlgo {
 	// cluster a set of snippets using weighted mean shift
 	private List<NSnippetCluster> cluster(List<NSnippet> snippets, double bandwidth) {
 		List<NDoubleVector> points = toPoints(snippets); // snippet -> point
-//		System.out.println(points);
 		List<Integer> weights = getWeights(snippets); // weight: number of snippet visitors
-//		System.out.println(weights);
-//		System.out.println(bandwidth);
-//		System.out.println(mMergeWindow);
-//		System.out.println(mMaxIter);
 		NMeanShift ms = new NMeanShift();
 		ms.cluster(points, weights, bandwidth, mMergeWindow, mMaxIter);
 		Map<Integer, List<Integer>> clusters = ms.getClusters();
-//		System.out.println(clusters);
 		return getSnippetClusters(snippets, clusters);
 	}
 
@@ -123,12 +107,11 @@ public class NMeanshiftAlgo {
 		return result;
 	}
 
-	// ============================================Split pattern
+	// ============================================Split pattern====================================================================
 	private void splitPattern(List<NSnippet> snippets, double bandwidth) {
-
 		if (bandwidth < 5e-4)
 			return;
-
+		
 		List<NSnippetCluster> snippetClusters = cluster(snippets, bandwidth);
 		
 		List<NSnippet> remainingSnippets = new ArrayList<NSnippet>();
@@ -140,6 +123,7 @@ public class NMeanshiftAlgo {
 				remainingSnippets.addAll(sc.getSnippet());
 			}
 		}
+		
 		splitPattern(remainingSnippets, bandwidth * mTau);
 	}
 

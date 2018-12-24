@@ -12,26 +12,21 @@ public class NMeanShift {
 
 	private final double SQRT_2_PI = FastMath.sqrt(2 * Math.PI);
 
-	int maxIteration = 100;
-	double bandwidth = 0.01;
-	double mergeWindow = 0.001;
-	List<Integer> weights = null; // weights of points
-	List<NDoubleVector> points = null; 
-	List<NDoubleVector> centers = null;
-	boolean[] converged = null;
-	int[] designation = null;
+	private int maxIteration = 100;
+	private double bandwidth = 0.01;
+	private double mergeWindow = 0.001;
+	private List<Integer> weights = null; // weights of points
+	private List<NDoubleVector> points = null; 
+	private List<NDoubleVector> centers = null;
+	private boolean[] converged = null;
+	private int[] designation = null;
 
 	public List<NDoubleVector> cluster(List<NDoubleVector> points, List<Integer> weights,
 			double bandwidth, double mergeWindow, int maxIterations) {
-
 		initialize(points, weights, maxIterations, bandwidth, mergeWindow);
-
-		// now iterate over all centers
 		for (int i = 0; i < maxIterations; i++) {
-			// return the number of centers that have not converged yet
 			int remainingConvergence = meanShift();
 			// merge if centers are within the mergeWindow
-
 			if (remainingConvergence == 0) {
 				break;
 			}
@@ -43,7 +38,6 @@ public class NMeanShift {
 	//get clusters from designation
 	public Map<Integer, List<Integer>> getClusters() {
 		Map<Integer, List<Integer>> clusters = new HashMap<Integer, List<Integer>>(); 
-		//key:cluster id, value:list of members
 		for(int i=0; i<designation.length; i++) {
 			int clusterID = designation[i];
 			if ( clusters.containsKey(clusterID) ) {
@@ -61,10 +55,6 @@ public class NMeanShift {
 		return designation;
 	}
 	
-	
-	/*
-	 * 
-	 * */
 	private void initialize(List<NDoubleVector> points, List<Integer> weights, int maxIteration,
 			double bandwidth, double mergeWindow) {
 
@@ -140,7 +130,6 @@ public class NMeanShift {
 
 	private double gaussianGradient(double dist) {
 		return -1;
-		//return - FastMath.exp(-(dist * dist) / 2d) * dist / SQRT_2_PI ;
 	}
 	
 	private void assign() {

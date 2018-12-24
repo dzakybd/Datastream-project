@@ -5,19 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import Database.Group;
-import Database.Place;
-import Database.Places;
 import NDatabase.NDatabase;
 import NMeanshift.NGroup;
 import NMeanshift.NGroupSequence;
-import coarsepattern.GroupSequence;
-import coarsepattern.Snippet;
 
 public class NSnippetCluster {
-	int mSnippetLength; //snippetLength
-	List<NSnippet> mSnippets; // all the snippets must have the same length
-	public List<Integer> mGroupSequence; // a sequence of group ID, the coarse pattern
+	int mSnippetLength; 
+	List<NSnippet> mSnippets; 
+	public List<Integer> mGroupSequence; 
 
 	public NSnippetCluster() {
 		mSnippets = new ArrayList<NSnippet>();
@@ -33,7 +28,6 @@ public class NSnippetCluster {
 	}
 
 	public void view() {
-//		System.out.println("Snipptet ");
 		for (NSnippet s : mSnippets) {
 			s.view();
 		}
@@ -41,11 +35,11 @@ public class NSnippetCluster {
 		for (Integer i : mGroupSequence) {
 			System.out.print(i + " - ");
 		}
-//		System.out.println();
 		System.out.println();
 	}
+	
 
-	////////////////////////////////////////////////////
+	//////////////////////Splitter//////////////////////////////
 
 	// transform a snippet cluster into a group sequence
 	public NGroupSequence toGroupSequence() {

@@ -2,6 +2,7 @@ package UserInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +24,12 @@ import processing.core.PApplet;
 import de.fhpotsdam.unfolding.providers.Microsoft;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap.*;
 import de.fhpotsdam.unfolding.utils.MapUtils;
-import finegrained.NProcessing;
-import finegrained.Processing;
 import g4p_controls.*;
 
 public class FGNGui extends PApplet {
 	UnfoldingMap map;
 	NProcessing Nprocess = null;
 	NDatabase D;
-//	private Map<Integer, SimplePointMarker> placingMarker = new HashMap<Integer, SimplePointMarker>();
 //	private Map<Integer,List<SimpleLinesMarker>> lineMarker = new HashMap<Integer,List<SimpleLinesMarker>>();
 	private List<SimplePointMarker> placingMarker = new ArrayList<SimplePointMarker>();
 	private List<SimpleLinesMarker> lineMarker = new ArrayList<SimpleLinesMarker>();
@@ -75,7 +73,7 @@ public class FGNGui extends PApplet {
 	// Use this method to add additional statements
 	// to customise the GUI controls
 	public void customGUI() {
-		map = new UnfoldingMap(this, 240, 40, 720, 600, new OpenStreetMapProvider());
+		map = new UnfoldingMap(this, 240, 40, 720, 520, new OpenStreetMapProvider());
 		MapUtils.createDefaultEventDispatcher(this, map);
 	}
 
@@ -94,7 +92,7 @@ public class FGNGui extends PApplet {
 	}
 
 	public void trajectoryOnMap(List<NPlace> places) {
-		map = new UnfoldingMap(this, 240, 40, 720, 600, new OpenStreetMapProvider());
+		map = new UnfoldingMap(this, 240, 40, 720, 520, new OpenStreetMapProvider());
 		map.zoomAndPanTo(10, new Location(zoom.lat, zoom.getLng()));
 		if (this.currentPattern != null && this.checkbox_showline.isSelected()) {
 			foldingCoarse();
@@ -102,7 +100,6 @@ public class FGNGui extends PApplet {
 		placingMarker = new ArrayList<SimplePointMarker>();
 		viewPlaceOnly(places);
 		showPointMarker();
-		
 		MapUtils.createDefaultEventDispatcher(this, map);
 
 	}
@@ -143,6 +140,55 @@ public class FGNGui extends PApplet {
 			}
 		}
 //		MapUtils.createDefaultEventDispatcher(this, map);
+	}
+
+	public void getSupport() {
+
+		Map<Integer, List<NSnippetCluster>> divider = new HashMap<Integer, List<NSnippetCluster>>();
+
+		for (NSnippetCluster x : this.currentPattern) {
+			int temp = x.getSnippet().get(0).mPlaceSequence.size();
+			if (!divider.keySet().contains(temp)) {
+				List<NSnippetCluster> tempdata = new ArrayList<NSnippetCluster>();
+				divider.put(temp, tempdata);
+			}
+			divider.get(temp).add(x);
+		}
+
+		String category = "";
+		for (Entry<Integer, List<NSnippetCluster>> entry : divider.entrySet()) {
+			category = category + "Pattern Length = " + entry.getKey() + ", Size = " + entry.getValue().size() + "\n";
+			Map<Integer, List<NSnippet>> forsort = new HashMap<Integer, List<NSnippet>>();
+			for (NSnippetCluster x : entry.getValue()) {
+				forsort.put(x.getSnippet().size(), x.getSnippet());
+			}
+
+			Map<Integer, String> length = new HashMap<Integer, String>();
+			for (NSnippetCluster x : entry.getValue()) {
+				String content = "";
+				for (NSnippet y : x.getSnippet()) {
+//					tempsize = y.mPlaceSequence.size();
+					for (NPlace c : y.mPlaceSequence) {
+						content = content + c.category.categoryName + " ->";
+					}
+					break;
+				}
+
+				content = "(Support= " + x.getSnippet().size() + ") => " + content;
+				length.put(x.getSnippet().size(), content);
+			}
+//
+			List sortedKeys = new ArrayList(forsort.keySet());
+			Collections.sort(sortedKeys);
+
+			for (int i = sortedKeys.size() - 1; i >= 0; i--) {
+				category = category + length.get(sortedKeys.get(i)) + "\n";
+			}
+//			category = category + "\n\n";
+
+		}
+
+		textarea_top5.setText(category);
 	}
 
 	public void showPointMarker() {
@@ -344,8 +390,7 @@ public class FGNGui extends PApplet {
 			this.currentplace.addAll(this.D.getPlace().values());
 			this.textfield_databasesize.setText(Integer.toString(this.D.trajectories.size()));
 			this.textfield_numberofplace.setText(Integer.toString(this.currentplace.size()));
-		
-
+			this.textfield_categorysize.setText(Integer.toString(this.D.getGroup().size()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -388,6 +433,8 @@ public class FGNGui extends PApplet {
 		setCurrentPlace();
 		trajectoryOnMap(this.currentplace);
 		this.textfield_numberofplace.setText(Integer.toString(this.currentplace.size()));
+
+		getSupport();
 	} // _CODE_:button_prefix:551316:
 
 	public void button1_Mean(GButton source, GEvent event) { // _CODE_:button_Mean:823129:
@@ -404,11 +451,12 @@ public class FGNGui extends PApplet {
 		textfield_fine.setText(Integer.toString(Nprocess.getFineGrained().size()));
 		textfield_timefine.setText(Double.toString(timeRefine));
 		textfield_totaltime.setText(Double.toString(new Double(textfield_timecoarse.getText()) + timeRefine));
+		getSupport();
 	} // _CODE_:button_Mean:823129:
 
 	public void button1_pm(GButton source, GEvent event) { // _CODE_:button_pm:669719:
 		println("button_pm - GButton >> GEvent." + event + " @ " + millis());
-		
+
 		Nprocess.setParams(textfield_sup.getText(), textfield_time.getText(), textfield_var.getText(),
 				textfield_toa.getText(), textfield_bandwidth.getText(), textfield_patternLength.getText());
 		long start = System.currentTimeMillis();
@@ -434,6 +482,7 @@ public class FGNGui extends PApplet {
 		Nprocess.viewFineGrained();
 		textfield_timefine.setText(Double.toString(timeRefine));
 		textfield_totaltime.setText(Double.toString(new Double(textfield_timecoarse.getText()) + timeRefine));
+		getSupport();
 
 	} // _CODE_:button_pm:669719:
 
@@ -506,6 +555,30 @@ public class FGNGui extends PApplet {
 
 	public void button1_reset(GButton source, GEvent event) { // _CODE_:button_reset:656389:
 		println("button_reset - GButton >> GEvent." + event + " @ " + millis());
+		textarea_top5.setText("");
+		textfield_bandwidth.setText("");
+		textfield_categorysize.setText("");
+		textfield_coarse.setText("");
+		textfield_databasesize.setText("");
+		textfield_fine.setText("");
+		textfield_numberofplace.setText("");
+		textfield_patternLength.setText("");
+		textfield_sup.setText("");
+		textfield_time.setText("");
+		textfield_var.setText("");
+		textfield_totaltime.setText("");
+		textfield_toa.setText("");
+		textfield_timefine.setText("");
+		textfield_timecoarse.setText("");
+		category.setText("");
+		place.setText("");
+		sequence.setText("");
+		for (GCheckbox i : test) {
+			i.setText("");
+		}
+		map = new UnfoldingMap(this, 240, 40, 720, 520, new OpenStreetMapProvider());
+		MapUtils.createDefaultEventDispatcher(this, map);
+
 	} // _CODE_:button_reset:656389:
 
 	public void textfield1_patternLength(GTextField source, GEvent event) { // _CODE_:textfield_patternLength:543036:
@@ -571,6 +644,10 @@ public class FGNGui extends PApplet {
 		println("checkbox16 - GCheckbox >> GEvent." + event + " @ " + millis());
 		showChekbox();
 	} // _CODE_:checkbox16:875575:
+
+	public void textarea1_top5(GTextArea source, GEvent event) { // _CODE_:textarea_top5:517038:
+		println("textarea_top5 - GTextArea >> GEvent." + event + " @ " + millis());
+	} // _CODE_:textarea_top5:517038:
 
 	// Create all the GUI controls.
 	// autogenerated do not edit
@@ -712,22 +789,23 @@ public class FGNGui extends PApplet {
 		checkbox_showline.setOpaque(false);
 		checkbox_showline.addEventHandler(this, "checkbox1_showline");
 		label_top5 = new GLabel(this, 961, 300, 183, 20);
-		label_top5.setText("Top 5 pattern");
+		label_top5.setText("Visualisation");
+		label_top5.setTextBold();
 		label_top5.setOpaque(false);
-		label_categorysize = new GLabel(this, 960, 360, 108, 21);
-		label_categorysize.setText("Category");
+		label_categorysize = new GLabel(this, 950, 360, 132, 21);
+		label_categorysize.setText("Number of Category");
 		label_categorysize.setOpaque(false);
 		textfield_categorysize = new GTextField(this, 1080, 360, 108, 20, G4P.SCROLLBARS_NONE);
 		textfield_categorysize.setOpaque(true);
 		textfield_categorysize.addEventHandler(this, "textfield1_categorisize");
-		label_visualization = new GLabel(this, 960, 270, 80, 20);
-		label_visualization.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-		label_visualization.setText("Visualization");
-		label_visualization.setTextBold();
-		label_visualization.setOpaque(false);
-//		  dropList_top5 = new GDropList(this, 961, 331, 227, 120, 5);
-//		  dropList_top5.setItems(loadStrings("list_681273"), 0);
-//		  dropList_top5.addEventHandler(this, "dropList1_top5");
+//		label_visualization = new GLabel(this, 960, 270, 80, 20);
+//		label_visualization.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+//		label_visualization.setText("Visualization");
+//		label_visualization.setTextBold();
+//		label_visualization.setOpaque(false);
+//		dropList_top5 = new GDropList(this, 182, 150, 90, 80, 3);
+//		dropList_top5.addItem("asdf");
+//		dropList_top5.addEventHandler(this, "dropList_top5");
 		checkbox1 = new GCheckbox(this, 957, 388, 116, 24);
 		checkbox1.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
 		checkbox1.setOpaque(false);
@@ -758,7 +836,7 @@ public class FGNGui extends PApplet {
 		button_reset.setText("Reset");
 		button_reset.addEventHandler(this, "button1_reset");
 		label_patternlength = new GLabel(this, 10, 430, 109, 21);
-		label_patternlength.setText("Pattern Length");
+		label_patternlength.setText("Min Pattern Length");
 		label_patternlength.setOpaque(false);
 		textfield_patternLength = new GTextField(this, 130, 430, 101, 20, G4P.SCROLLBARS_NONE);
 		textfield_patternLength.setOpaque(true);
@@ -823,6 +901,10 @@ public class FGNGui extends PApplet {
 		checkbox16.setOpaque(false);
 		checkbox16.addEventHandler(this, "checkbox16_clicked1");
 		checkbox16.setSelected(true);
+		textarea_top5 = new GTextArea(this, 240, 540, 720, 110);
+//		textarea_top5 = new GTextArea(this, 960, 270, 227, 110);
+		textarea_top5.setOpaque(true);
+		textarea_top5.addEventHandler(this, "textarea1_top5");
 	}
 
 	// Variable declarations
@@ -871,7 +953,7 @@ public class FGNGui extends PApplet {
 	GLabel label_top5;
 	GLabel label_categorysize;
 	GTextField textfield_categorysize;
-	GLabel label_visualization;
+//	GLabel label_visualization;
 	GDropList dropList_top5;
 	GCheckbox checkbox1;
 	GCheckbox checkbox2;
@@ -893,4 +975,5 @@ public class FGNGui extends PApplet {
 	GCheckbox checkbox14;
 	GCheckbox checkbox15;
 	GCheckbox checkbox16;
+	GTextArea textarea_top5;
 }

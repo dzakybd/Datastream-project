@@ -1,4 +1,4 @@
-package finegrained;
+package UserInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import NMeanshift.NMeanshiftAlgo;
 import NPrefixspan.NPrefixspanAlgo;
 import NPrefixspan.NSnippet;
 import NPrefixspan.NSnippetCluster;
-import coarsepattern.SnippetCluster;
 
 public class NProcessing {
 	public NDatabase database = new NDatabase();

@@ -7,14 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import Database.Sequence;
 import NDatabase.NDatabase;
 import NDatabase.NPlace;
 import NDatabase.NSequence;
 import NDatabase.NTrajectory;
 
 public class NProjectedDatabase {
-//	private List<NProjectedSequence> pseudoSequences = new ArrayList<NProjectedSequence>();
 	public List<NTrajectory> trajectories = new ArrayList<NTrajectory>();
 
 	public Map<NPlace, List<Integer>> projection(NDatabase d, NSequence item) {
@@ -78,7 +76,6 @@ public class NProjectedDatabase {
 			for (NSequence sc : t.trajectory) {
 				sc.view();
 			}
-//			t.view();
 			System.out.println();
 		}
 	}
