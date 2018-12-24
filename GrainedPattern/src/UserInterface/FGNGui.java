@@ -1,5 +1,6 @@
 package UserInterface;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +30,9 @@ import g4p_controls.*;
 public class FGNGui extends PApplet {
 	UnfoldingMap map;
 	NProcessing Nprocess = null;
-	NDatabase D;
+	NDatabase D = null;
+	String path;
+	String fileSelected;
 //	private Map<Integer,List<SimpleLinesMarker>> lineMarker = new HashMap<Integer,List<SimpleLinesMarker>>();
 	private List<SimplePointMarker> placingMarker = new ArrayList<SimplePointMarker>();
 	private List<SimpleLinesMarker> lineMarker = new ArrayList<SimpleLinesMarker>();
@@ -47,9 +50,9 @@ public class FGNGui extends PApplet {
 	public String to = Double.toString(0.8);
 	public String patternlength = Integer.toString(2);
 
-	String dataFile = "../Data/sequences - Copy.txt";
-	String placeFile = "../Data/places - Copy.csv";
-	String groupFile = "../Data/category - Copy.csv";
+	String dataFile = "./Data/sequences - Copy.txt";
+	String placeFile = "./Data/places - Copy.csv";
+	String groupFile = "./Data/category - Copy.csv";
 
 	public void setup() {
 		size(1200, 660, P3D);
@@ -64,10 +67,11 @@ public class FGNGui extends PApplet {
 
 	public void draw() {
 		background(230);
-//		
-//		fill(255,0,0);
-//		rect(20,20,100,100);
 		map.draw();
+	}
+
+	public static void main(String args[]) {
+		PApplet.main(new String[] { FGNGui.class.getName() });
 	}
 
 	// Use this method to add additional statements
@@ -94,7 +98,7 @@ public class FGNGui extends PApplet {
 	public void trajectoryOnMap(List<NPlace> places) {
 		map = new UnfoldingMap(this, 240, 40, 720, 520, new OpenStreetMapProvider());
 		map.zoomAndPanTo(10, new Location(zoom.lat, zoom.getLng()));
-		if (this.currentPattern != null && this.checkbox_showline.isSelected()) {
+		if (this.currentPattern != null && checkbox_showline.isSelected()) {
 			foldingCoarse();
 		}
 		placingMarker = new ArrayList<SimplePointMarker>();
@@ -105,7 +109,7 @@ public class FGNGui extends PApplet {
 	}
 
 	public void viewPlaceOnly(List<NPlace> place) {
-
+		placingMarker = new ArrayList<SimplePointMarker>();
 		for (NPlace plc : place) {
 			Location placeX = new Location(plc.getLat(), plc.getLng());
 			SimplePointMarker placeMarker = new SimplePointMarker(placeX);
@@ -118,6 +122,7 @@ public class FGNGui extends PApplet {
 
 	public void foldingCoarse() {
 		// Draw place
+		this.lineMarker = new ArrayList<SimpleLinesMarker>();
 		for (NSnippetCluster ns : this.currentPattern) {
 			for (NSnippet s : ns.getSnippet()) {
 				int i = 0;
@@ -215,37 +220,34 @@ public class FGNGui extends PApplet {
 		}
 	}
 
-	public void viewWithLine(boolean place) {
-		map = new UnfoldingMap(this, 240, 40, 720, 600, new OpenStreetMapProvider());
+	public void viewWithLine() {
+		map = new UnfoldingMap(this, 240, 40, 720, 520, new OpenStreetMapProvider());
 		map.zoomAndPanTo(10, new Location(zoom.lat, zoom.getLng()));
-
-		for (NTrajectory tr : D.trajectories) {
-			Random rand = new Random();
-			// Java 'Color' class takes 3 floats, from 0 to 1.
-			float r = rand.nextInt(256);
-			float g = rand.nextInt(256);
-			float b = rand.nextInt(256);
+		placingMarker = new ArrayList<SimplePointMarker>();
+		lineMarker = new ArrayList<SimpleLinesMarker>();
+		int traj = 0;
+		for (NTrajectory ns : this.D.trajectories) {
 			int i = 0;
-			for (NSequence ns : tr.trajectory) {
-				Location placeX = new Location(ns.place.getLat(), ns.place.getLng());
-				if (place) {
+			for (NSequence s : ns.trajectory) {
+					Location placeX = new Location(s.place.getLat(), s.place.getLng());
 					SimplePointMarker placeMarker = new SimplePointMarker(placeX);
-					placeMarker.setStrokeWeight(2);
+					placeMarker.setStrokeWeight(1);
+					placeMarker.setColor(groupcolor.get((s.place.category.categoryId) - 1));
+					placingMarker.add(placeMarker);
 					map.addMarkers(placeMarker);
-				}
-				if (i != 0) {
-					Location placePrev = new Location(tr.trajectory.get(i - 1).place.getLat(),
-							tr.trajectory.get(i - 1).place.getLng());
-//					fill(0);
-					SimpleLinesMarker connectionMarker = new SimpleLinesMarker(placePrev, placeX);
 
-					connectionMarker.setColor(color(r, g, b));
-					connectionMarker.setStrokeWeight(1);
-					map.addMarkers(connectionMarker);
-				}
-				i++;
+					if (i != 0) {
+						Location placePrev = new Location(ns.trajectory.get(i - 1).place.getLat(),ns.trajectory.get(i - 1).place.getLng());
+//							fill(0);
+						SimpleLinesMarker connectionMarker = new SimpleLinesMarker(placePrev, placeX);
+						connectionMarker.setColor(linecolor.get(traj));
+						connectionMarker.setStrokeWeight(1);
+						lineMarker.add(connectionMarker);
+						map.addMarkers(connectionMarker);
+					}
+					i++;
 			}
-			linecolor.add(color(r, g, b));
+			traj++;
 		}
 		MapUtils.createDefaultEventDispatcher(this, map);
 	}
@@ -338,6 +340,22 @@ public class FGNGui extends PApplet {
 		}
 	}
 
+	public void fileSelected(File selection) {
+		if (selection == null) {
+			println("Window was closed or the user hit cancel.");
+		} else {
+			println("User selected " + selection.getAbsolutePath());
+			path = selection.getAbsolutePath();
+			if (fileSelected.equals("category")) {
+				category.setText(path);
+			} else if (fileSelected.equals("place")) {
+				place.setText(path);
+			} else if (fileSelected.equals("sequence")) {
+				sequence.setText(path);
+			}
+		}
+	}
+
 	/*
 	 * ========================================================= ==== WARNING ===
 	 * ========================================================= The code in this
@@ -358,14 +376,19 @@ public class FGNGui extends PApplet {
 
 	public void button1_category(GButton source, GEvent event) { // _CODE_:buttonCategory:818042:
 		println("buttonCategory - GButton >> GEvent." + event + " @ " + millis());
+		selectInput("Select a file to process:", "fileSelected");
+		fileSelected = "category";
 	} // _CODE_:buttonCategory:818042:
 
 	public void textfield1_place(GTextField source, GEvent event) { // _CODE_:place:292592:
 		println("place - GTextField >> GEvent." + event + " @ " + millis());
+
 	} // _CODE_:place:292592:
 
 	public void button1_place(GButton source, GEvent event) { // _CODE_:button_place:687991:
 		println("button_place - GButton >> GEvent." + event + " @ " + millis());
+		selectInput("Select a file to process:", "fileSelected");
+		fileSelected = "place";
 	} // _CODE_:button_place:687991:
 
 	public void textfield1_change1(GTextField source, GEvent event) { // _CODE_:sequence:555789:
@@ -374,6 +397,8 @@ public class FGNGui extends PApplet {
 
 	public void button1_sequence(GButton source, GEvent event) { // _CODE_:button_sequence:376547:
 		println("button_sequence - GButton >> GEvent." + event + " @ " + millis());
+		selectInput("Select a file to process:", "fileSelected");
+		fileSelected = "sequence";
 	} // _CODE_:button_sequence:376547:
 
 	public void button1_createdb(GButton source, GEvent event) { // _CODE_:button_createdb:646818:
@@ -382,6 +407,7 @@ public class FGNGui extends PApplet {
 			setGCheck();
 			Nprocess = new NProcessing();
 			Nprocess.createDatabase(this.category.getText(), this.place.getText(), this.sequence.getText());
+			this.D = new NDatabase();
 			this.D = Nprocess.database;
 			zoom = D.trajectories.get(0).trajectory.get(0).getPlace();
 			this.setColor();
@@ -391,14 +417,16 @@ public class FGNGui extends PApplet {
 			this.textfield_databasesize.setText(Integer.toString(this.D.trajectories.size()));
 			this.textfield_numberofplace.setText(Integer.toString(this.currentplace.size()));
 			this.textfield_categorysize.setText(Integer.toString(this.D.getGroup().size()));
-			if(checkbox_showline.isSelected()) {
-				viewWithLine(checkbox_showPlace.isSelected());
+			if (checkbox_showline.isSelected()) {
+				viewWithLine();
+			} else {
+				this.trajectoryOnMap(this.currentplace);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			this.trajectoryOnMap(this.currentplace);
+
 		}
 	} // _CODE_:button_createdb:646818:
 
@@ -482,7 +510,6 @@ public class FGNGui extends PApplet {
 		this.currentPattern = Nprocess.getFineGrained();
 		setCurrentPlace();
 		trajectoryOnMap(this.currentplace);
-		Nprocess.viewFineGrained();
 		textfield_timefine.setText(Double.toString(timeRefine));
 		textfield_totaltime.setText(Double.toString(new Double(textfield_timecoarse.getText()) + timeRefine));
 		getSupport();
@@ -979,4 +1006,5 @@ public class FGNGui extends PApplet {
 	GCheckbox checkbox15;
 	GCheckbox checkbox16;
 	GTextArea textarea_top5;
+
 }

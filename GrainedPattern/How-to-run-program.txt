@@ -1,2 +1,16 @@
 How to run program :
-1. 
+
+1. Double click FGPattern.jar
+
+or
+
+1. Open command prompt
+2. Go to ".jar" file directory
+3. type : java -jar FGPattern.jar in command line
+
+==================
+
+1. To show trajectory, checklist show trajectory radio button in the top left of map
+2. To show placechecklist show place radio button in the top left of map
+3. It is recommended to uncheck show trajectory because it will take more time to load
+4. If you want to show the trajectory, you have to check show trajectory first then push the button
