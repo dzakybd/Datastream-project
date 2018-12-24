@@ -215,40 +215,40 @@ public class FGNGui extends PApplet {
 		}
 	}
 
-//	public void viewWithLine(boolean place) {
-//		map = new UnfoldingMap(this, 240, 40, 720, 600, new OpenStreetMapProvider());
-//		map.zoomAndPanTo(10, new Location(zoom.lat, zoom.getLng()));
-//
-//		for (NTrajectory tr : D.trajectories) {
-//			Random rand = new Random();
-//			// Java 'Color' class takes 3 floats, from 0 to 1.
-//			float r = rand.nextInt(256);
-//			float g = rand.nextInt(256);
-//			float b = rand.nextInt(256);
-//			int i = 0;
-//			for (NSequence ns : tr.trajectory) {
-//				Location placeX = new Location(ns.place.getLat(), ns.place.getLng());
-//				if (place) {
-//					SimplePointMarker placeMarker = new SimplePointMarker(placeX);
-//					placeMarker.setStrokeWeight(2);
-//					map.addMarkers(placeMarker);
-//				}
-//				if (i != 0) {
-//					Location placePrev = new Location(tr.trajectory.get(i - 1).place.getLat(),
-//							tr.trajectory.get(i - 1).place.getLng());
-////					fill(0);
-//					SimpleLinesMarker connectionMarker = new SimpleLinesMarker(placePrev, placeX);
-//
-//					connectionMarker.setColor(color(r, g, b));
-//					connectionMarker.setStrokeWeight(1);
-//					map.addMarkers(connectionMarker);
-//				}
-//				i++;
-//			}
-//			linecolor.add(color(r, g, b));
-//		}
-//		MapUtils.createDefaultEventDispatcher(this, map);
-//	}
+	public void viewWithLine(boolean place) {
+		map = new UnfoldingMap(this, 240, 40, 720, 600, new OpenStreetMapProvider());
+		map.zoomAndPanTo(10, new Location(zoom.lat, zoom.getLng()));
+
+		for (NTrajectory tr : D.trajectories) {
+			Random rand = new Random();
+			// Java 'Color' class takes 3 floats, from 0 to 1.
+			float r = rand.nextInt(256);
+			float g = rand.nextInt(256);
+			float b = rand.nextInt(256);
+			int i = 0;
+			for (NSequence ns : tr.trajectory) {
+				Location placeX = new Location(ns.place.getLat(), ns.place.getLng());
+				if (place) {
+					SimplePointMarker placeMarker = new SimplePointMarker(placeX);
+					placeMarker.setStrokeWeight(2);
+					map.addMarkers(placeMarker);
+				}
+				if (i != 0) {
+					Location placePrev = new Location(tr.trajectory.get(i - 1).place.getLat(),
+							tr.trajectory.get(i - 1).place.getLng());
+//					fill(0);
+					SimpleLinesMarker connectionMarker = new SimpleLinesMarker(placePrev, placeX);
+
+					connectionMarker.setColor(color(r, g, b));
+					connectionMarker.setStrokeWeight(1);
+					map.addMarkers(connectionMarker);
+				}
+				i++;
+			}
+			linecolor.add(color(r, g, b));
+		}
+		MapUtils.createDefaultEventDispatcher(this, map);
+	}
 
 	public void setGCheck() {
 		test.add(checkbox1);
@@ -391,6 +391,9 @@ public class FGNGui extends PApplet {
 			this.textfield_databasesize.setText(Integer.toString(this.D.trajectories.size()));
 			this.textfield_numberofplace.setText(Integer.toString(this.currentplace.size()));
 			this.textfield_categorysize.setText(Integer.toString(this.D.getGroup().size()));
+			if(checkbox_showline.isSelected()) {
+				viewWithLine(checkbox_showPlace.isSelected());
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
