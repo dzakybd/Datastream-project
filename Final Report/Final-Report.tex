@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{hyperref}
 \usepackage{subcaption}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -24,7 +25,7 @@
 \title{SplitterGUI\\
 {\large GUI Application of Mining Fine-Grained Sequential Patterns in Semantic Trajectories}
 \thanks{The SplitterGUI project files can be downloaded at
-$github.com/dzakybd/Datastream-project$}
+$github.com/dzakybd/SplitterGUI$}
 }
 
 \author{\IEEEauthorblockN{Tanjung Dion, Fawwaz Dzaky Zakiyal}
@@ -36,7 +37,7 @@ Busan, Republic of Korea \\
 \maketitle
 
 \begin{abstract}
-Semantic trajectory is a sequence of timestamped places wherein each place has information about spatial location and a semantic label. By mining fine-grained pattern that satisfy semantic consistency, spatial compactness and temporal continuity, it will give benefit such as urban planning and targeted advertising. One of the state-the-art method to mine the fine-grained pattern is Splitter algorithm. Firstly, it find set of coarse patterns and their snippets by using PrefixSpan, and then find the set of fine-grained patterns using mean shift method. In this project we build, SplitterGUI, GUI application to visualize the process of the Splitter algorithm. We also discuss the key techniques in Splitter and conduct an experiment using 4SQ database to demontrate the result of SplitterGUI.
+Semantic trajectory is a sequence of time-stamped places wherein each place has information about spatial location and a semantic label. By mining fine-grained pattern that satisfy semantic consistency, spatial compactness and temporal continuity, it will give benefit such as urban planning and targeted advertising. One of the state-the-art method to mine the fine-grained pattern is Splitter algorithm. Firstly, it find set of coarse patterns and their snippets by using PrefixSpan, and then find the set of fine-grained patterns using mean shift method. In this project we build, SplitterGUI, GUI application to visualize the process of the Splitter algorithm. We also discuss the key techniques in Splitter and conduct an experiment using 4SQ database to demonstrate the result of SplitterGUI.
 
 \end{abstract}
 
@@ -47,9 +48,9 @@ fine-grained pattern, semantic trajectories, GUI application.
 \section{Introduction}
 The sequential patterns can be found in a trajectory database, if it properly extracted. It become benefit for targeted advertising, urban planning, location prediction, etc. In other hand, classic sequential pattern mining algorithms cannot work effectively in semantic trajectories, a sequence of time-stamped places wherein each place has information about spatial location and a semantic label. Because of the places in the continuous space cannot be regarded as independent items, so independent place cannot be used to find the frequent sequences. Instead, semantic label need to be grouped to form frequent sequential patterns. But, there is also a challenge to get fine-grained sequential patterns, that it must fulfill requirements of spatial compactness (compact area for each place category), semantic consistency (consistent place ID in each place category) and temporal continuity (limited time constraint).
 \par
-The process of mining fine-grained pattern have been proposed by Zang et. al \cite{zhang2014splitter}. They provide two-step approach to obtain fine-grained sequential patterns. First-step, obtain the coarse patterns from the semantic trajectory data using the full projection method to modify PrefixSpan. The result patterns will fullfil the semantic and temporal constraints. Second-step, splitting each coarse patterns into fine-grained patterns that fulfill the spatial constraint through top-down pattern discovery process using weighted snippet shift by Epanechnikov kernel.
+The process of mining fine-grained pattern have been proposed by Zang et. al \cite{zhang2014splitter}. They provide two-step approach to obtain fine-grained sequential patterns. First-step, obtain the coarse patterns from the semantic trajectory data using the full projection method to modify PrefixSpan. The result patterns will fulfill the semantic and temporal constraints. Second-step, splitting each coarse patterns into fine-grained patterns that fulfill the spatial constraint through top-down pattern discovery process using weighted snippet shift by Epanechnikov kernel.
 \par
-In this project, aiming at implementing the mining fine-grained pattern method proposed by Zang et. al \cite{zhang2014splitter} and build the GUI application to visualize the process of the Splitter algorithm, called SplitterGUI. It make the database, course patterns and fine-grained patterns into a visualized map by determined Splitter algoritm's parameters. Afterwards, we discuss the key techniques in Splitter and conduct an experiment using 4SQ database to demontrate the result of SplitterGUI.
+In this project, aiming at implementing the mining fine-grained pattern method proposed by Zang et. al \cite{zhang2014splitter} and build the GUI application to visualize the process of the Splitter algorithm, called SplitterGUI. It make the database, course patterns and fine-grained patterns into a visualized map by determined Splitter algorithm's parameters. Afterwards, we discuss the key techniques in Splitter and conduct an experiment using 4SQ database to demonstrate the result of SplitterGUI.
 
 
 \section{Implementation}
@@ -60,7 +61,7 @@ In this project, aiming at implementing the mining fine-grained pattern method p
 \caption{System Design}
 \label{fig:systemdesign}
 \end{figure}
-Figure \ref{fig:systemdesign} show the process of mining fine-grained pattern in semantic trajectories. This method consist of two part: mining coarse pattern and splitting coarse pattern. Mining coarse pattern is a process to find sequential pattern that satisfy semantic consistency and temporal continuity. In the first step, we add trajectory database that have information about place id, movement time, group id, and spatial location to the system. This trajectory database will be transformed into semantic trajectory database by grouping place id based on category. However, we still keep the original place id in each category to prevent one trajectory from being counted repeatedly. By doing this process, our trajectory database will satisfy semantic consistency.
+Fig. \ref{fig:systemdesign} show the process of mining fine-grained pattern in semantic trajectories. This method consist of two part: mining coarse pattern and splitting coarse pattern. Mining coarse pattern is a process to find sequential pattern that satisfy semantic consistency and temporal continuity. In the first step, we add trajectory database that have information about place id, movement time, group id, and spatial location to the system. This trajectory database will be transformed into semantic trajectory database by grouping place id based on category. However, we still keep the original place id in each category to prevent one trajectory from being counted repeatedly. By doing this process, our trajectory database will satisfy semantic consistency.
 \par
 Then, PrefixSpan algorithm will be used to mining the coarse pattern. In the PrefixSpan algorithm, we include all post-fixes to avoid missing pattern under the given time constrain. Output from mining coarse pattern is set of coarse pattern that will be used in the next process. The next process is finding fine-grained pattern that satisfy spatial compactness in by splitting a coarse pattern in top down manner. Set of coarse pattern from previous process will be transformed into K-dimensional point x.
 \par
@@ -100,7 +101,7 @@ The result of coarse pattern has satisfy support threshold $\sigma$ and time con
 
 For finding fine-grained pattern, mean shift clustering algorithm is used because it does not need any prior knowledge and only use one parameter called bandwidth. Bandwidth parameter is used to limit the area of clustering. The main idea of mean shift algorithm is choosing random point as the center and use bandwidth to limit the coverage area of clustering. Then calculate mean shift vector to shift the center point toward new point that more dense than previous point. For windows kernel, we use Epanechnikov kernel. 
 \par
-Before clustering, we transform snippet in each coarse pattern into a 2k-dimensional point x by assembling the coordinates of each snippet. Then, the number of visitors is added to x as weight. Algorithm 2 shows how to cluster point using mean shift algorithm. Output of this algorithm is set of cluster.
+Before clustering, we transform snippet in each coarse pattern into a 2K-dimensional point x by assembling the coordinates of each snippet. Then, the number of visitors is added to x as weight. Algorithm 2 shows how to cluster point using mean shift algorithm. Output of this algorithm is set of cluster.
 
 \begin{figure}[h!]
 	\centering
@@ -143,9 +144,9 @@ This project will use the real database, 4SQ that collected from Foursquare chec
 \end{enumerate}
 
 \subsection{Implementation detail}
-We will re-implement the process of mining fine-grained pattern using Java programing language. For improving GUI performance, we use G4P library (http://www.lagers.org.uk/g4p/) that based on OpenGL and JavaFX rendering engines. The other purpose is to support geographical map visualization from unfolding library (http://unfoldingmaps.org/) that also use OpenGL rendering engines. We also using other libraries such as apache commons (http://commons.apache.org) to support our program. 
+We will re-implement the process of mining fine-grained pattern using Java programming language. For improving GUI performance, we use G4P library (\url{lagers.org.uk/g4p}) that based on OpenGL and JavaFX rendering engines. The other purpose is to support geographical map visualization from unfolding library (\url{unfoldingmaps.org}) that also use OpenGL rendering engines. We also using other libraries such as Apache Commons (\url{commons.apache.org}) to support our program. 
 \par 
-Input of our program is database file that will be used to build graph representation as our database in the system. This graph representation is based on adjacency list that is shown in \ref{fig:adjacency}. There are 4 object: database, trajectory, place, and category. Database object has list of trajectory that have id to represent people and have list of sequence to represent the movement. Each movement is a list of timestamped place that has information of place id, position, and category. In the next step, we implement mining coarse pattern algorithm and refine coarse pattern algorithm for finding fine-grained pattern from the database. 
+Input of our program is database file that will be used to build graph representation as our database in the system. This graph representation is based on adjacency list that is shown in \ref{fig:adjacency}. There are 4 object: database, trajectory, place, and category. Database object has list of trajectory that have id to represent people and have list of sequence to represent the movement. Each movement is a list of time-stamped place that has information of place id, position, and category. In the next step, we implement mining coarse pattern algorithm and refine coarse pattern algorithm for finding fine-grained pattern from the database. 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=1\linewidth]{adjacency}
@@ -171,7 +172,7 @@ Experiment is conducted in windows 10 Pro 64-bit running on Processor Intel Core
 	\label{fig:mapdatabase}
 \end{figure}
 
-After creating database, we run prefix span algorithm for mining coarse pattern. In this process, places that occurs in the coarse pattern is 23264. It means that the process reduce places up to half of number of place occurred in the original database. The running time of mining coarse pattern is 3.685 seconds. Therefore, prefixspan algorithm is fast enough to finding a pattern in a database. Coarse pattern found from the database is 127 which consist of pattern length of 2 (109 patterns) and pattern length of 3 (18 patterns). The highest support or the total number of trajectory that using this pattern in the length of 2 is shop $\rightarrow$ food which contains 2905 of trajectories. For the pattern length of 3, the highest support is food $\rightarrow$ shop $\rightarrow$ food which used by 299 of trajectories. From this result we can assume that a lot of people like to go the food area then go shopping then go to the another food area. Fig. \ref{fig:mapcoarse} shows place reduction after mining coarse pattern.
+After creating database, we run prefix span algorithm for mining coarse pattern. In this process, places that occurs in the coarse pattern is 23264. It means that the process reduce places up to half of number of place occurred in the original database. The running time of mining coarse pattern is 3.685 seconds. Therefore, PrefixSpan algorithm is fast enough to finding a pattern in a database. Coarse pattern found from the database is 127 which consist of pattern length of 2 (109 patterns) and pattern length of 3 (18 patterns). The highest support or the total number of trajectory that using this pattern in the length of 2 is shop $\rightarrow$ food which contains 2905 of trajectories. For the pattern length of 3, the highest support is food $\rightarrow$ shop $\rightarrow$ food which used by 299 of trajectories. From this result we can assume that a lot of people like to go the food area then go shopping then go to the another food area. Fig. \ref{fig:mapcoarse} shows place reduction after mining coarse pattern.
 
 \begin{figure}[h!]
 	\centering
@@ -180,7 +181,7 @@ After creating database, we run prefix span algorithm for mining coarse pattern.
 	\label{fig:mapcoarse}
 \end{figure}
 
-The next step is refine coarse pattern to get fine grained pattern from the database. After we push mean shift button in the left side, the system will begin to refine coarse pattern. Fine grained pattern found in the database using the inputed parameter are 57 patterns. Using the inputed parameters, we cannot find fine-grained pattern that have length 3 occurred in the coarse pattern. It means that our coarse pattern that have length 3 is not satisfy the spatial closeness based on the parameters. Most trajectory follows pattern shop $\rightarrow$ food that have support 1063. Fig \ref{fig:maprefine} shows that places are clustered in a dense location only.    
+The next step is refine coarse pattern to get fine grained pattern from the database. After we push mean shift button in the left side, the system will begin to refine coarse pattern. Fine grained pattern found in the database using the inputted parameter are 57 patterns. Using the inputted parameters, we cannot find fine-grained pattern that have length 3 occurred in the coarse pattern. It means that our coarse pattern that have length 3 is not satisfy the spatial closeness based on the parameters. Most trajectory follows pattern shop $\rightarrow$ food that have support 1063. Fig \ref{fig:maprefine} shows that places are clustered in a dense location only.    
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\linewidth]{mapRefine}
@@ -189,9 +190,7 @@ The next step is refine coarse pattern to get fine grained pattern from the data
 \end{figure}
 
 \section{Conclusions}
-After doing the implementation of splitter: Mining Fine-Grained Pattern, it shows that it capable to find pattern that are frequent, in limited time movement, and have spatial closeness. In this paper, it also shown that the running time of splitter to find fine-grained pattern only take total running time below 20seconds from database that consist of 14909 trajectory and 48564 of places. In the first step, mining coarse pattern algorithm is used to searching pattern that satisfy support threshold $\sigma$ and time constraint $\Delta$t. In the next step, coarse pattern will be used as the input in refining pattern that satisfy spatial variance.   
-
-
+After doing the implementation of Splitter: Mining Fine-Grained Pattern, it shows that it capable to find pattern that are frequent, in limited time movement, and have spatial closeness. In this paper, it also shown that the running time of Splitter to find fine-grained pattern only take total running time below 20 seconds from database that consist of 14909 trajectory and 48564 of places. In the first step, mining coarse pattern algorithm is used to searching pattern that satisfy support threshold $\sigma$ and time constraint $\Delta$t. In the next step, coarse pattern will be used as the input in refining pattern that satisfy spatial variance.   
 
 \section*{Acknowledgment}
 This paper is submitted to fulfill term project task from Stream Database class (Fall 2018), Pusan National University.
