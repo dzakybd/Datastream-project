@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{subcaption}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -83,32 +84,82 @@ Output this item as our short pattern and then grow this pattern by calling Pref
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=1.0\linewidth]{mining_coarse_pattern}
-	\caption{Mining coarse pattern algorithm}
+	\caption{Mining coarse pattern algorithm \cite{zhang2014splitter}}
 	\label{fig:mining-coarse-pattern}
 \end{figure}
 
 \subsubsection{Finding Fine-Grained Pattern}
 The result of coarse pattern has satisfy support threshold $\sigma$ and time constraint $\Delta t$. Next step is checking the spatial variance of place in each group category. For example, graph representation of coarse pattern is shown in Fig. \ref{fig:graph-coarse-pattern}. Spatial location of place $P_{5}$ with other place in group $G_{1}$ is to far. Therefore, we have to prune pattern $P_{5}\rightarrow P_{4}\rightarrow P_{6}$ from fine-grained pattern. 
-\begin{figure}[!ht]
+
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{graph_coarse_pattern}
 	\caption{Graph representation of coarse pattern result}
 	\label{fig:graph-coarse-pattern}
 \end{figure}
-For finding fine-grained pattern, mean shift clustering algorithm is used because it does not need any prior knowledge and only use one parameter called bandwidth. Bandwidth parameter is used to limit the area of clustering. The main idea of mean shift algorithm is choosing random point as the center and use bandwidth to limit the coverage area of clustering. Then calculate mean shift vector to shift the center point toward new point that more dense than previous point. 
+
+For finding fine-grained pattern, mean shift clustering algorithm is used because it does not need any prior knowledge and only use one parameter called bandwidth. Bandwidth parameter is used to limit the area of clustering. The main idea of mean shift algorithm is choosing random point as the center and use bandwidth to limit the coverage area of clustering. Then calculate mean shift vector to shift the center point toward new point that more dense than previous point. For windows kernel, we use Epanechnikov kernel. 
+\par
+Before clustering, we transform snippet in each coarse pattern into a 2k-dimensional point x by assembling the coordinates of each snippet. Then, the number of visitors is added to x as weight. Algorithm 2 shows how to cluster point using mean shift algorithm. Output of this algorithm is set of cluster.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1.0\linewidth]{"algorithm weighted snippet"}
+	\caption{Weighted snippet shift algorithm \cite{zhang2014splitter}}
+	\label{fig:algorithm-weighted-snippet}
+\end{figure}
+Specify the best bandwidth size is not an easy task. If bandwidth is small, there will be many small snippet cluster that not exceed support threshold $\sigma$. On the other hand, large bandwidth make the large cluster that cannot satisfy variance threshold $rho$. Therefore, we have to start with large bandwidth then dampen it until no more pattern exist. For this problem, notion of $\gamma$-community is presented to reduce the cost of repeating the process in large cluster. $\gamma$-community can be defined as connected component between two cluster. Two cluster can be connected if distance between two cluster no more than $\gamma$.  Fig. \ref{fig:lamda-community} shows the example of $\gamma$-community. 
+\begin{figure}[!h]
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{"cluster example"}
+		\caption{Snippet cluster}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{"lamda community"}
+		\caption{$\gamma$-community}
+	\end{subfigure}
+	\caption{Example of $\gamma$-community}
+	\label{fig:lamda-community}
+\end{figure}
+
+Algorithm 3 shows refine coarse pattern algorithm. First, we cluster snippet using weighted snippet shift with bandwidth h. For each cluster we check if the support is at least $sigma$ and the variance is no more than $rho$ then report as fine grained pattern and remove from cluster set. Set $\gamma$ as root 2 multiply by dampening factor and current bandwidth. Then construct set of $\gamma$-community from cluster S that are not reported as fine grained pattern. For each $\gamma$-community, check if the support is at least $sigma$ then repeat the process of refine coarse pattern algorithm. 
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{"refine coarse"}
+	\caption{Refine coarse pattern algorithm \cite{zhang2014splitter}}
+	\label{fig:refine-coarse}
+\end{figure}
 
 \section{Demonstration}
 
 \subsection{Database}
-This project will use the real database, 4SQ that collected from Foursquare check-in sequence in New York. It consists of 48564 places that divided into 417 place categories and it stored semantic trajectories from 14909 users. 4SQ database provides 3 files:
+This project will use the real database, 4SQ that collected from Foursquare check-in sequence in New York. It consists of 48564 places that divided into 417 place with list of categories and it stored semantic trajectories from 14909 users. 4SQ database provides 3 files:
 \begin{enumerate}
 \item \textit{Sequences}, it contains users semantic trajectories including attributes of check-in time-stamp and place ID.
-\item \textit{Places}, it contains information about the places (place ID, latitude, longitude, category ID).
+\item \textit{Places}, it contains information about the places (place ID, latitude, longitude, list of category ID).
 \item \textit{Category}, it contains information of place category ID corresponding with its place category name.
 \end{enumerate}
 
-\subsection{Result}
-We will re-implement the process of mining fine-grained pattern using java programing language. The user interface of program will be provided as shown in the Figure. Figure shows the illustration of our program. There are an database input in csv format, 4 parameters input,  show button for showing graph representation like in the figure, and 3 button to start the process individually or start all of the process respectively.
+\subsection{Implementation detail}
+We will re-implement the process of mining fine-grained pattern using Java programing language. For improving GUI performance, we use G4P library (http://www.lagers.org.uk/g4p/) that based on OpenGL and JavaFX rendering engines. The other purpose is to support geographical map visualization from unfolding library (http://unfoldingmaps.org/) that use OpenGL rendering engines. We also using other libraries such as apache commons (http://commons.apache.org) to support our program. 
+\par 
+Input of our program is database file that will be used to build graph representation as our database in the system. This graph representation is based on adjacency list that is shown in \ref{fig:adjacency}. There are 4 object: database, trajectory, place, and category. Database object has list of trajectory that have id to represent people and have list of sequence to represent the movement. Each movement is a list of timestamped place that has information of place id, position, and category. In the next step, we implement mining coarse pattern algorithm and refine coarse pattern algorithm for finding fine-grained pattern from the database. 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{adjacency}
+	\caption{Structure of database in adjacency list representation}
+	\label{fig:adjacency}
+\end{figure}
+
+The user interface of program will be provided as shown in the Fig. \ref{fig:visual}. The figure shows the illustration of our program. There are 3 database input in .csv format for category and place and .txt format for the sequence data. There are also have 6 input parameters in the configuration. Support threshold, pattern length, and time limit for mining coarse pattern, and variance threshold, dampening factor for refine the coarse pattern. In the first step, we have to create the database. After that,we can mine coarse first then perform refine coarse pattern or do both coarse pattern and refine coarse pattern respectively.
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=1\linewidth]{visual}
+	\caption{Visualization}
+	\label{fig:visual}
+\end{figure}
 
 \section*{Acknowledgment}
 This paper is submitted to fulfill term project task from Stream Database class (Fall 2018), Pusan National University.
